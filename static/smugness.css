@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+H1 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+        text-align:left;
+	margin-left: 50px;
+	color: #575757;
+	font-size: 4.1em;
+	font-weight: bold;
+}
+
+p {
+	/* font-family: 'Abel', sans-serif; */
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+        text-align:center;
+	color: black;
+	font-size: 4.1em;
+	font-weight: bold;
+}
