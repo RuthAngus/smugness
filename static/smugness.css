@@ -21,6 +21,16 @@ p {
 	display:inline;
 }
 
+p2 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+        text-align:right;
+	margin-left: 400px;
+	color: black;
+	font-size: 1.5em;
+	font-weight: bold;
+	display:inline;
+}
+
 figure {
 	float: right;
 	margin-right: 550px;
