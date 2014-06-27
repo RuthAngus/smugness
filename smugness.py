@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import forecastio
 import numpy as np
 from api_key import key
@@ -39,11 +41,11 @@ def index():
     compass = 'S'
     if loc1[0] > 0:
         compass = 'N'
-    text1 = '%s %s' %(abs(loc1[0]), compass)
+    text1 = '%s %s %s' %(abs(loc1[0]), u'\N{DEGREE SIGN}', compass)
     compass = 'E'
     if loc1[1] > 0:
         compass = 'W'
-    text2 = '%s %s' %(abs(loc1[1]), compass)
+    text2 = '%s %s %s' %(abs(loc1[1]), u'\N{DEGREE SIGN}', compass)
 
     return render_template('index.html', text1=text1, text2=text2, text3=current1.summary, text4=smug)
 
