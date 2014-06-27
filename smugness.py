@@ -34,7 +34,7 @@ def index():
             compare_locations(loc1, loc2)
 #     current1 = single_location(here)
 
-    smug = 'no'
+    smug = "no. Haha I'm sooooo smug!"
     if smugness < 1:
         smug = 'yes (obv)'
 

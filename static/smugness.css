@@ -6,7 +6,7 @@ H1 {
         text-align:left;
 	margin-left: 50px;
 	color: #575757;
-	font-size: 3.1em;
+	font-size: 2.9em;
 	font-weight: bold;
 }
 
@@ -16,7 +16,7 @@ p {
         text-align:center;
 	margin-left: 400px;
 	color: black;
-	font-size: 3.1em;
+	font-size: 2.9em;
 	font-weight: bold;
 	display:inline;
 }
@@ -25,10 +25,10 @@ p2 {
 	font-family: 'Yanone Kaffeesatz', sans-serif;
         text-align:right;
 	margin-left: 400px;
+	margin-right: 550px;
 	color: black;
 	font-size: 1.5em;
 	font-weight: bold;
-	display:inline;
 }
 
 figure {
