@@ -14,7 +14,15 @@ p {
 	/* font-family: 'Abel', sans-serif; */
 	font-family: 'Yanone Kaffeesatz', sans-serif;
         text-align:center;
+	margin-left: 400px;
 	color: black;
 	font-size: 3.1em;
 	font-weight: bold;
+	display:inline;
+}
+
+figure {
+	float: right;
+	margin-right: 550px;
+	display:inline;
 }

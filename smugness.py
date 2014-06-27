@@ -27,7 +27,7 @@ riodj = (22.9083, 43.1964)
 @app.route('/')
 def index():
 
-    loc1 = sydney
+    loc1 = here
     loc2 = new_york
 
     current1, current2, smugness = compare_locations(loc1, loc2)
@@ -48,6 +48,8 @@ def index():
     text2 = '%s %s %s' %(abs(loc1[1]), u'\N{DEGREE SIGN}', compass)
 
     return render_template('index.html', text1=text1, text2=text2, text3=current1.summary, text4=smug)
+
+# @app.route('/image/rain.png')
 
 # returns current forecast of one location
 def single_location(loc1):
