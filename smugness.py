@@ -67,9 +67,14 @@ def index():
     temp1 = "%s%sC" %(int(temp1), u'\N{DEGREE SIGN}')
     temp2 = "%s%sC" %(int(temp2), u'\N{DEGREE SIGN}')
 
+    description = "That's not so good, but don't worry -"
+    if here_rank > 10:
+        description = "That's pretty nice, AND"
+
     return render_template('index.html', text1=text1, text2=text2, \
             text3=current1.summary, text4=smug, temp1=temp1, temp2=temp2, \
-            img_name1=icon1, img_name2=icon2, ranks=ranks, text5=current2.summary)
+            img_name1=icon1, img_name2=icon2, ranks=ranks, text5=current2.summary, \
+            description=description)
 
 # returns current forecast of one location
 def single_location(loc1):

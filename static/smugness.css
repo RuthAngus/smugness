@@ -1,10 +1,16 @@
 @charset "utf-8";
 /* CSS Document */
 
+body {
+	margin: 0;
+	padding: 0;
+}
+
 H1 {
 	font-family: 'Yanone Kaffeesatz', sans-serif;
         text-align:left;
 	margin-left: 50px;
+	margin-right: 50px;
 	color: #575757;
 	font-size: 2.9em;
 	font-weight: bold;
@@ -25,14 +31,19 @@ p2 {
 	font-family: 'Yanone Kaffeesatz', sans-serif;
         text-align:right;
 	margin-left: 400px;
-	margin-right: 550px;
+	margin-right: 50px;
 	color: black;
 	font-size: 1.5em;
 	font-weight: bold;
+	display:inline;
 }
 
 figure {
 	float: right;
 	margin-right: 550px;
 	display:inline;
+}
+
+.whitespace50 {
+	height: 50px;
 }
