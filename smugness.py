@@ -30,9 +30,9 @@ def index():
     loc1 = here
     loc2 = new_york
 
-    current1, current2, smugness, icon1, icon2, temp1, temp2 = \
-            compare_locations(loc1, loc2)
-#     current1 = single_location(here)
+    current1, icon1, temp1 = single_location(loc1)
+    current2, smugness, icon2, temp2 = \
+            compare_locations(current1, loc2)
 
     smug = "no. Haha I'm sooooo smug!"
     if smugness < 1:
@@ -59,23 +59,18 @@ def single_location(loc1):
     lat1, lng1 = loc1
     forecast1 = forecastio.load_forecast(api_key, lat1, lng1)
     current1 = forecast1.currently()
-    return current1
+    return current1, current1.icon, current1.temperature
 
 # compares the weather index of two locations
 # if > 1, loc1 is better than loc2.
-def compare_locations(loc1, loc2):
-    lat1, lng1 = loc1
+def compare_locations(current1, loc2):
     lat2, lng2 = loc2
-
-    forecast1 = forecastio.load_forecast(api_key, lat1, lng1)
-    current1 = forecast1.currently()
-    index1 = weather_index(current1)
-
     forecast2 = forecastio.load_forecast(api_key, lat2, lng2)
     current2 = forecast2.currently()
+
+    index1 = weather_index(current1)
     index2 = weather_index(current2)
-    return current1, current2, index1/index2, current1.icon, current2.icon, \
-            current1.temperature, current2.temperature
+    return current2, index1/index2, current2.icon, current2.temperature
 
 # calculates a weather index for a location, based on its current forecast
 # currently uses temperature only
