@@ -24,19 +24,36 @@ new_york = (40.7127, -74.0059)
 tokyo = (35.6895, -139.6917)
 riodj = (22.9083, 43.1964)
 
+loc_strs = ['Sydney', 'New York', 'Tokyo', 'Rio de Janeiro']
+
 @app.route('/')
 def index():
 
     loc1 = here
-    loc2 = new_york
+    loc2 = sydney
 
     current1, icon1, temp1 = single_location(loc1)
     current2, smugness, icon2, temp2 = \
             compare_locations(current1, loc2)
 
+    # binary index
     smug = "no. Haha I'm sooooo smug!"
     if smugness < 1:
         smug = 'yes (obv)'
+
+    # find weather index of current location
+    index = weather_index(current1)
+    here_goodness = 1.
+    here_rank = here_goodness*index
+
+    # rank locations according to current weather, taking usual weather into account
+    ranked_locs = rank_locations([sydney, new_york, tokyo, riodj], loc_strs)
+    ranks = ranked_locs
+    ranks = 'Nowhere'
+#     for loc_tuple in ranked_locs:
+#         if loc_tuple[1] > here_rank:
+#             ranks = loc_tuple[0]
+    ranks = ranked_locs[0][0]
 
     # add N, S, E, W
     compass = 'S'
@@ -52,7 +69,7 @@ def index():
 
     return render_template('index.html', text1=text1, text2=text2, \
             text3=current1.summary, text4=smug, temp1=temp1, temp2=temp2, \
-            img_name1=icon1, img_name2=icon2)
+            img_name1=icon1, img_name2=icon2, ranks=ranks, text5=current2.summary)
 
 # returns current forecast of one location
 def single_location(loc1):
@@ -67,33 +84,28 @@ def compare_locations(current1, loc2):
     lat2, lng2 = loc2
     forecast2 = forecastio.load_forecast(api_key, lat2, lng2)
     current2 = forecast2.currently()
-
     index1 = weather_index(current1)
     index2 = weather_index(current2)
     return current2, index1/index2, current2.icon, current2.temperature
 
-def rank_locations(current1, otherlocs):
-
-    # calculate index for current location
-    indices = np.empty(len(otherlocs)+1)
-    indices[0] = weather_index(current1)
-
+def rank_locations(latlongs, names):
     # calculate current indices for all other locations
     # change this so it updates every hour to save on api calls
-    for i, loc in enumerate(otherlocs):
+    indices = np.empty(len(names))
+    for i, loc in enumerate(latlongs):
         forecast = forecastio.load_forecast(api_key, loc[0], loc[1])
         current = forecast.currently()
         indices[i] = weather_index(current)
-
-    # weight by average goodness
-    # average goodness could be 'learnt' or could take data from NOAO
-    # for now I'm going to make average goodness up
-    i_sydney = .8
-    i_tokyo = .5
-    i_riodj = .9
-    i_here = .4
-    i_new_york = .7
-    return
+    # weight by goodness
+    # goodness could be 'learnt' or could take data from NOAO
+    # for now I'm going to make it up
+    #sydney, tokyo, riodj, new_york
+    goodness = [.8, .5, .9, .7]
+    goodness = [1., 1., 1., 1.]
+    likelihood = indices*goodness
+    tuples = zip(names, likelihood)
+    ranked = sorted(tuples, key=lambda x: x[1])
+    return ranked
 
 # order locations by longitude
 def order(otherlocs):
