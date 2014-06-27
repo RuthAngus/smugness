@@ -30,7 +30,7 @@ def index():
     loc1 = here
     loc2 = new_york
 
-    current1, current2, smugness = compare_locations(loc1, loc2)
+    current1, current2, smugness, icon = compare_locations(loc1, loc2)
 #     current1 = single_location(here)
 
     smug = 'no'
@@ -47,9 +47,7 @@ def index():
         compass = 'W'
     text2 = '%s %s %s' %(abs(loc1[1]), u'\N{DEGREE SIGN}', compass)
 
-    return render_template('index.html', text1=text1, text2=text2, text3=current1.summary, text4=smug)
-
-# @app.route('/image/rain.png')
+    return render_template('index.html', text1=text1, text2=text2, text3=current1.summary, text4=smug, img_name=icon)
 
 # returns current forecast of one location
 def single_location(loc1):
@@ -71,7 +69,7 @@ def compare_locations(loc1, loc2):
     forecast2 = forecastio.load_forecast(api_key, lat2, lng2)
     current2 = forecast2.currently()
     index2 = weather_index(current2)
-    return current1, current2, index1/index2
+    return current1, current2, index1/index2, current1.icon
 
 # calculates a weather index for a location, based on its current forecast
 # currently uses temperature only
@@ -84,6 +82,9 @@ def weather_index(current):
     if current.precipIntensity != 0:
         precipType = current.precipType
     return temp
+
+def remove_space(phrase):
+    return phrase.replace(' ', '').replace('-','').lower()
 
 if __name__ == '__main__':
     app.run(debug=True)
