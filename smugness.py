@@ -20,7 +20,7 @@ api_key = key()
 # Some locations:
 here = (51.2330, 0.2859)
 sydney = (-33.86, -151.2094)
-new_york = (40.7127, 74.0059)
+new_york = (40.7127, -74.0059)
 tokyo = (35.6895, -139.6917)
 riodj = (22.9083, 43.1964)
 
@@ -72,6 +72,33 @@ def compare_locations(current1, loc2):
     index2 = weather_index(current2)
     return current2, index1/index2, current2.icon, current2.temperature
 
+def rank_locations(current1, otherlocs):
+
+    # calculate index for current location
+    indices = np.empty(len(otherlocs)+1)
+    indices[0] = weather_index(current1)
+
+    # calculate current indices for all other locations
+    # change this so it updates every hour to save on api calls
+    for i, loc in enumerate(otherlocs):
+        forecast = forecastio.load_forecast(api_key, loc[0], loc[1])
+        current = forecast.currently()
+        indices[i] = weather_index(current)
+
+    # weight by average goodness
+    # average goodness could be 'learnt' or could take data from NOAO
+    # for now I'm going to make average goodness up
+    i_sydney = .8
+    i_tokyo = .5
+    i_riodj = .9
+    i_here = .4
+    i_new_york = .7
+    return
+
+# order locations by longitude
+def order(otherlocs):
+    return
+
 # calculates a weather index for a location, based on its current forecast
 # currently uses temperature only
 def weather_index(current):
@@ -80,6 +107,8 @@ def weather_index(current):
     humidity = current.humidity*100
     precip = current.precipIntensity
     precipProb = current.precipProbability
+    windspeed = current.windSpeed
+    cloudcover = current.cloudCover
     if current.precipIntensity != 0:
         precipType = current.precipType
     return temp
