@@ -10,6 +10,45 @@
 <title>Smugness</title>
 </head>
 
+<!-- <p> Enter your location <input type="text" name="FirstName" value="e.g. 'Im Beckerfeld 6'"><br> </p> -->
+<!-- <input type="submit" value="Submit"> -->
+
+<!-- <p id="getloc"> Enter your location <input type="text" name="location" value="tian'anmen, beijing'"><br> </p>
+<button onclick="getLocation()">Submit</button>
+<script>
+var x = document.getElementById("getloc");
+function getLocation()
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    x.innerHTML="Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+</script> -->
+
+<p id="demo">Click the button to get your coordinates:</p>
+<button onclick="getLocation()">Try It</button>
+<script>
+var x = document.getElementById("demo");
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+    x.innerHTML="Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude;
+}
+
+</script>
+
 <body>
 <H1> Your location: </H1>
 <p> {{text1}}, {{text2}} </p>
