@@ -23,22 +23,22 @@ def compare_locations(current1, loc2):
     index2 = weather_index(current2)
     return current2, index1/index2, current2.icon, current2.temperature
 
-def rank_locations(latlongs, names):
+def rank_locations(latlongs, place_names):
     # calculate current indices for all other locations
     # change this so it updates every hour to save on api calls
-    indices = np.empty(len(names))
+    wthr_inds = np.empty(len(place_names))
     for i, loc in enumerate(latlongs):
         forecast = forecastio.load_forecast(api_key, loc[0], loc[1])
         current = forecast.currently()
-        indices[i] = weather_index(current)
+        wthr_inds[i] = weather_index(current)
     # weight by goodness
     # goodness could be 'learnt' or could take data from NOAO
     # for now I'm going to make it up
     #sydney, tokyo, riodj, new_york
-    goodness = [.8, .5, .9, .7]
-    goodness = [1., 1., 1., 1.]
-    likelihood = indices*goodness
-    tuples = zip(names, likelihood)
+    gdnss = [.8, .5, .9, .7] #the higher the gdnss, the better the average wthr
+    smg = (1./wthr_inds)*gdnss #higher smg = more likely to appear
+    # FIXME: equal weighting of wthr_inds and gdnss
+    tuples = zip(place_names, smg)
     ranked = sorted(tuples, key=lambda x: x[1])
     return ranked
 
