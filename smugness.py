@@ -3,7 +3,7 @@ import forecastio
 import numpy as np
 from api_key import key
 from pygeocoder import Geocoder
-from farm import single_location, compare_locations, rank_locations, weather_index
+from farm import *
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -30,18 +30,28 @@ loc_strs = ['Sydney', 'New York', 'Tokyo', 'Rio de Janeiro']
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/<latlong>')
+def show_latlong(latlong):
+
+    try:
+        here = map(float, latlong.split(','))
+    except ValueError:
+        return flask.abort(404)
+
+    if len(here) != 2:
+        return flask.abort(404)
 
     loc1 = here
     loc2 = sydney
 
+    # find current weather, icon + temp of loc1
     current1, icon1, temp1 = single_location(loc1)
-    current2, smugness, icon2, temp2 = \
-            compare_locations(current1, loc2)
 
-    # binary index
-    smug = "no. Haha I'm sooooo smug!"
-    if smugness < 1:
-        smug = 'yes (obv)'
+    # find current weather, icon + temp of loc2
+    # smugness is the ratio of weather indices
+    current2, smugness, icon2, temp2 = compare_locations(current1, loc2)
 
     # find weather index of current location
     index = weather_index(current1)
@@ -57,85 +67,23 @@ def index():
 #             ranks = loc_tuple[0]
     ranks = ranked_locs[0][0]
 
-    # add N, S, E, W
-    compass = 'S'
-    if loc1[0] > 0:
-        compass = 'N'
-    text1 = '%s %s %s' %(abs(loc1[0]), u'\N{DEGREE SIGN}', compass)
-    compass = 'W'
-    if loc1[1] > 0:
-        compass = 'E'
-    text2 = '%s%s %s' %(abs(loc1[1]), u'\N{DEGREE SIGN}', compass)
+    text1, text2 = compass(loc1)
     temp1 = "%s%sC" %(int(temp1), u'\N{DEGREE SIGN}')
     temp2 = "%s%sC" %(int(temp2), u'\N{DEGREE SIGN}')
+
+#     print loc1[0], loc1[1]
+#     word_location = Geocoder.reverse_geocode(loc1[0], loc1[1])
+#     print word_location
 
     description = "That's not so good, but don't worry -"
     if here_rank > 10:
         description = "That's pretty nice, AND"
 
-    return render_template('index.html', text1=text1, text2=text2, \
+    return render_template('smug.html', text1=text1, text2=text2, \
             text3=current1.summary, text4=smug, temp1=temp1, temp2=temp2, \
             img_name1=icon1, img_name2=icon2, ranks=ranks, text5=current2.summary, \
             description=description)
 
-# @app.route('/<lat><long>')
-
-# # returns current forecast of one location
-# def single_location(loc1):
-#     lat1, lng1 = loc1
-#     forecast1 = forecastio.load_forecast(api_key, lat1, lng1)
-#     current1 = forecast1.currently()
-#     return current1, current1.icon, current1.temperature
-#
-# # compares the weather index of two locations
-# # if > 1, loc1 is better than loc2.
-# def compare_locations(current1, loc2):
-#     lat2, lng2 = loc2
-#     forecast2 = forecastio.load_forecast(api_key, lat2, lng2)
-#     current2 = forecast2.currently()
-#     index1 = weather_index(current1)
-#     index2 = weather_index(current2)
-#     return current2, index1/index2, current2.icon, current2.temperature
-#
-# def rank_locations(latlongs, names):
-#     # calculate current indices for all other locations
-#     # change this so it updates every hour to save on api calls
-#     indices = np.empty(len(names))
-#     for i, loc in enumerate(latlongs):
-#         forecast = forecastio.load_forecast(api_key, loc[0], loc[1])
-#         current = forecast.currently()
-#         indices[i] = weather_index(current)
-#     # weight by goodness
-#     # goodness could be 'learnt' or could take data from NOAO
-#     # for now I'm going to make it up
-#     #sydney, tokyo, riodj, new_york
-#     goodness = [.8, .5, .9, .7]
-#     goodness = [1., 1., 1., 1.]
-#     likelihood = indices*goodness
-#     tuples = zip(names, likelihood)
-#     ranked = sorted(tuples, key=lambda x: x[1])
-#     return ranked
-#
-# # order locations by longitude
-# def order(otherlocs):
-#     return
-#
-# # calculates a weather index for a location, based on its current forecast
-# # currently uses temperature only
-# def weather_index(current):
-#     temp = current.temperature
-#     feels_like = current.apparentTemperature
-#     humidity = current.humidity*100
-#     precip = current.precipIntensity
-#     precipProb = current.precipProbability
-#     windspeed = current.windSpeed
-#     cloudcover = current.cloudCover
-#     if current.precipIntensity != 0:
-#         precipType = current.precipType
-#     return temp
-#
-# def remove_space(phrase):
-#     return phrase.replace(' ', '').replace('-','').lower()
-
 if __name__ == '__main__':
     app.run(debug=True)
+

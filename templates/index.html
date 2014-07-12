@@ -10,34 +10,14 @@
 <title>Smugness</title>
 </head>
 
-<!-- <p> Enter your location <input type="text" name="FirstName" value="e.g. 'Im Beckerfeld 6'"><br> </p> -->
-<!-- <input type="submit" value="Submit"> -->
-
-<!-- <p id="getloc"> Enter your location <input type="text" name="location" value="tian'anmen, beijing'"><br> </p>
-<button onclick="getLocation()">Submit</button>
-<script>
-var x = document.getElementById("getloc");
-function getLocation()
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-}
-function showPosition(position) {
-    x.innerHTML="Latitude: " + position.coords.latitude +
-    "<br>Longitude: " + position.coords.longitude;
-}
-
-</script> -->
-
+<body>
 <p id="demo">Click the button to get your coordinates:</p>
 <button onclick="getLocation()">Try It</button>
 <script>
 var x = document.getElementById("demo");
 function getLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(gotopage);
     } else {
         x.innerHTML = "Geolocation is not supported by this browser.";
     }
@@ -46,30 +26,9 @@ function showPosition(position) {
     x.innerHTML="Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude;
 }
-
+function gotopage(position) {
+    var url = "/" + position.coords.latitude + "," + position.coords.longitude;
+    window.location = url;
+}
 </script>
-
-<body>
-<H1> Your location: </H1>
-<p> {{text1}}, {{text2}} </p>
-
-<H1> Your weather is: </H1>
-<p> {{text3}} </p>
-<figure>
-	<img border="0" src="/static/{{img_name1}}.png" alt="{{img_name1}}" width="100">
-</figure>
-<p2> {{temp1}}</p2>
-
-<div class="whitespace50"> </div>
-
-<!-- <H1> Is the weather 'better' in New York? </H1> -->
-<H1> {{description}} you've got better weather than {{ranks}}! </H1>
-<!-- <p> {{text4}}</p> -->
-
-<p> {{text5}}</p>
-<figure>
-	<img border="0" src="/static/{{img_name2}}.png" alt="{{img_name2}}" width="100">
-</figure>
-<p2> {{temp2}}</p2>
-
 </body>

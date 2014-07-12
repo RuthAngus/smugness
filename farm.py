@@ -62,3 +62,15 @@ def weather_index(current):
 
 def remove_space(phrase):
     return phrase.replace(' ', '').replace('-','').lower()
+
+def compass(loc):
+    # add N, S, E, W
+    compass = 'S'
+    if loc[0] > 0:
+        compass = 'N'
+    text1 = '%s %s %s' %(abs(loc[0]), u'\N{DEGREE SIGN}', compass)
+    compass = 'W'
+    if loc[1] > 0:
+        compass = 'E'
+    text2 = '%s%s %s' %(abs(loc[1]), u'\N{DEGREE SIGN}', compass)
+    return text1, text2
